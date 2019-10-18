@@ -14,9 +14,11 @@
 ActiveRecord::Schema.define(version: 20191018173702) do
 
   create_table "expenses", force: :cascade do |t|
-    t.string "date"
-    t.string "description"
-    t.float  "amount"
+    t.integer "day"
+    t.integer "month"
+    t.integer "year"
+    t.string  "description"
+    t.float   "amount"
   end
 
   create_table "users", force: :cascade do |t|
