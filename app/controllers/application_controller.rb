@@ -12,18 +12,6 @@ class ApplicationController < Sinatra::Base
     erb :index
   end
   
-  post "/" do
-    if !logged_in?
-      if params.keys.include?("login")
-        redirect "/login"
-      else
-        redirect "/signup"
-      end
-    else
-      redirect "/users/#{current_user.slug}"
-    end
-  end
-  
   helpers do
     def logged_in?
       !!session[:user_id]
