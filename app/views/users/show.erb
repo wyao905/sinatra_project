@@ -1,4 +1,28 @@
 <h1>Welcome <%=@user.name%>!</h1>
+<h3>Your current balance is:</h3>
 <p>
-  Balance: $<%=@user.balance%>
+  $<%='%.2f' % @user.balance%>
+</p>
+<h3>Recent transactions:</h3>
+<p>
+  <ol>
+    <%if @expenses.size == 0%>
+      There are no recent transactions. Record a deposit or expense below.
+    <%else%>
+      <%@expenses.each do |expense|%>
+        <li><%=expense%></li>
+      <%end%>
+    <%end%>
+  </ol>
+</p>
+<p>
+  <a href="/expense/new">New Transaction</a>
+</p>
+<br>
+<br>
+<br>
+<br>
+<br>
+<p>
+  | <a href="/logout">Logout</a> | <a href="/users/<%=@user.slug%>">Home</a> |
 </p>

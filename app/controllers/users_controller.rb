@@ -8,13 +8,12 @@ class UsersController < ApplicationController
   end
   
   post '/signup' do
-    binding.pry
-    if params[:name] == "" || params[:email] == "" || params[:password] == "" || (params[:balance] != "" && params[:balance].class != Float)
+    if params[:name] == "" || params[:email] == "" || params[:password] == ""
       redirect "/signup"
     else
       user = User.create(params)
       if params[:balance] == ""
-        user.balance = 0.00
+        user.balance = 0
         user.save
       end
       session[:user_id] = user.id

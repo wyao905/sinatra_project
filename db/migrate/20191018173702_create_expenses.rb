@@ -6,6 +6,7 @@ class CreateExpenses < ActiveRecord::Migration
       t.integer :year
       t.string :description
       t.float :amount
+      t.integer :user_id
     end
   end
 end

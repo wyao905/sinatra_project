@@ -19,6 +19,7 @@ ActiveRecord::Schema.define(version: 20191018173702) do
     t.integer "year"
     t.string  "description"
     t.float   "amount"
+    t.integer "user_id"
   end
 
   create_table "users", force: :cascade do |t|
