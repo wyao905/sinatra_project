@@ -3,7 +3,7 @@ class ExpensesController < ApplicationController
     if logged_in?
       @user = current_user
       @balance = @user.balance
-      erb :"/expenses/show_expense"
+      erb :"/users/show"
     else
       redirect "/"
     end
@@ -27,35 +27,41 @@ class ExpensesController < ApplicationController
   end
   
   get '/expenses/:id' do
-  #   if logged_in?
-  #     @user = current_user
-  #     erb :"/users/show_expense"
-  #   else
-  #     redirect "/login"
-  #   end
-  # end
+    if logged_in?
+      @user = current_user
+      @expense = Expense.find(params[:id])
+      erb :"/users/show_expense"
+    else
+      redirect "/login"
+    end
+  end
   
-  # get '/tweets/:id/edit' do
-  #   if logged_in?
-  #     @tweet = Tweet.find(params[:id])
-  #     erb :"/tweets/edit_tweet"
-  #   else
-  #     redirect "/login"
-  #   end
-  # end
+  get '/expenses/:id/edit' do
+    if logged_in?
+      @expense = Expense.find(params[:id])
+      erb :"/expenses/edit_expense"
+    else
+      redirect "/login"
+    end
+  end
   
-  # patch '/tweets/:id/edit' do
-  #   tweet = Tweet.find(params[:id])
-  #   tweet.content = params[:content]
-  #   tweet.save
-  # end
+  patch '/expense/:id/edit' do
+    expense = Expense.find(params[:id])
+    expense.day = params[:day]
+    expense.month = params[:month]
+    expense.year = params[:year]
+    expense.description = params[:description]
+    expense.amount = params[:amount]
+    expense.save
+    redirect "/expenses/#{expense.id}"
+  end
   
-  # delete '/tweets/:id/delete' do
-  #   tweet = Tweet.find(params[:id])
-  #   if tweet.user_id == current_user.id
-  #     tweet.delete
-  #     redirect "/tweets"
-  #   end
-  #   redirect "/tweets"
-  # end
+  delete '/expenses/:id/delete' do
+    expense = Expense.find(params[:id])
+    if expense.user_id == current_user.id 
+      expense.delete
+      redirect "/balance"
+    end
+    redirect "/balance"
+  end
 end
