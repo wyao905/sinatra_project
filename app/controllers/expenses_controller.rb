@@ -19,10 +19,15 @@ class ExpensesController < ApplicationController
   end
   
   post '/expenses/new' do
-    if params[:content] != ""
-      new_expense = Expense.create(content: params[:content])
-      current_user.expenses << new_expense
+    if params[:date] == "" || params[:amount] == "" || params[:description] == ""
+      redirect "/expenses/new"
     else
+      date = params[:date].split("-")
+      day = date[2]
+      month = date[1]
+      year = date[0]
+      new_expense = Expense.create(day: day, month: month, year: year, description: params[:description], amount: params[:amount])
+      current_user.expenses << new_expense
       redirect "/balance"
     end
   end
@@ -46,7 +51,7 @@ class ExpensesController < ApplicationController
     end
   end
   
-  patch '/expense/:id/edit' do
+  patch '/expenses/:id/edit' do
     expense = Expense.find(params[:id])
     expense.day = params[:day]
     expense.month = params[:month]

@@ -47,7 +47,7 @@ class UsersController < ApplicationController
 	
 	get '/users/:slug' do
 	  if current_user.slug == params[:slug]
-	    User.all.each{|user| @user = user if user.slug == params[:slug]}
+	    @user = current_user
 	    @expenses = @user.expenses
 	    erb :"/users/show"
 	  else

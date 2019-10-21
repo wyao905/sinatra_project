@@ -3,20 +3,26 @@
 <p>
   $<%='%.2f' % @user.balance%>
 </p>
-<h3>Recent transactions:</h3>
+<h3>Recent expenses:</h3>
 <p>
   <ol>
     <%if @expenses.size == 0%>
-      There are no recent transactions. Record a deposit or expense below.
+      There are no recent expenses. Record a new one below.
     <%else%>
       <%@expenses.each do |expense|%>
-        <li><%=expense%></li>
+        <li>
+          <%="Date: #{expense.year}/#{expense.month}/#{expense.day} - Amount: $#{'%.2f' % expense.amount}"%>
+           | 
+          <a href="/expenses/<%=expense.id%>">More Info</a>
+           | 
+          <a href="/expenses/<%=expense.id%>/edit">Edit</a>
+        </li>
       <%end%>
     <%end%>
   </ol>
 </p>
 <p>
-  <a href="/expenses/new">New Transaction</a>
+  <a href="/expenses/new">New Expense</a>
 </p>
 <br>
 <br>
