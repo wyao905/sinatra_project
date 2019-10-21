@@ -1,0 +1,17 @@
+<h3>New Transaction</h3>
+<form action="/expenses/new" method="post">
+  Enter transaction date: <input type="date" value="2012-3-23">
+  <br>
+  Enter amount: <input type="number" name="balance" step="0.01">
+  <br>
+  Name: <input type="text" name="name">
+  <br>
+  <input type="submit" value="Submit">
+  </p>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <p>| <a href="/logout">Logout</a> | <a href="/users/<%=@user.slug%>">Home</a> |</p>
+</form>

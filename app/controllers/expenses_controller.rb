@@ -9,15 +9,16 @@ class ExpensesController < ApplicationController
     end
   end
   
-  get '/expense/new' do
+  get '/expenses/new' do
     if logged_in?
+      @user = current_user
       erb :"/expenses/new"
     else
       redirect "/"
     end
   end
   
-  post '/expense/new' do
+  post '/expenses/new' do
     if params[:content] != ""
       new_expense = Expense.create(content: params[:content])
       current_user.expenses << new_expense
