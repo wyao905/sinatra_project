@@ -12,10 +12,8 @@
       <%@expenses.each do |expense|%>
         <li>
           <%="Date: #{expense.year}/#{expense.month}/#{expense.day} - Amount: $#{'%.2f' % expense.amount}"%>
-           | 
-          <a href="/expenses/<%=expense.id%>">More Info</a>
-           | 
-          <a href="/expenses/<%=expense.id%>/edit">Edit</a>
+            |  <a href="/expenses/<%=expense.id%>">More Info</a>
+            |  <a href="/expenses/<%=expense.id%>/edit">Edit</a>
         </li>
       <%end%>
     <%end%>
