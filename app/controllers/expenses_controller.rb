@@ -1,13 +1,13 @@
 class ExpensesController < ApplicationController
-  get '/balance' do
-    if logged_in?
-      @user = current_user
-      @balance = @user.balance
-      erb :"/users/show"
-    else
-      redirect "/"
-    end
-  end
+  # get '/balance' do
+  #   if logged_in?
+  #     @user = current_user
+  #     @balance = @user.balance
+  #     erb :"/users/show"
+  #   else
+  #     redirect "/"
+  #   end
+  # end
   
   get '/expenses/new' do
     if logged_in?
@@ -28,9 +28,8 @@ class ExpensesController < ApplicationController
       year = date[0]
       new_expense = Expense.create(day: day, month: month, year: year, description: params[:description], amount: params[:amount])
       current_user.expenses << new_expense
-      current_user.balance -= new_expense.amount
-      current_user.save
-      redirect "/balance"
+      current_user.update(balance: current_user.balance -= new_expense.amount)
+      redirect "/users/#{current_user.slug}"
     end
   end
   
@@ -68,8 +67,8 @@ class ExpensesController < ApplicationController
     expense = Expense.find(params[:id])
     if expense.user_id == current_user.id 
       expense.delete
-      redirect "/balance"
+      redirect "/users/#{current_user.slug}"
     end
-    redirect "/balance"
+    redirect "/users/#{current_user.slug}"
   end
 end
