@@ -28,7 +28,9 @@ class ExpensesController < ApplicationController
       year = date[0]
       new_expense = Expense.create(day: day, month: month, year: year, description: params[:description], amount: params[:amount])
       current_user.expenses << new_expense
-      redirect "/balance/edit"
+      current_user.balance -= new_expense.amount
+      current_user.save
+      redirect "/balance"
     end
   end
   
@@ -70,6 +72,4 @@ class ExpensesController < ApplicationController
     end
     redirect "/balance"
   end
-  
-  get '/balance/edit'
 end
