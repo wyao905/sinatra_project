@@ -1,14 +1,4 @@
 class ExpensesController < ApplicationController
-  # get '/balance' do
-  #   if logged_in?
-  #     @user = current_user
-  #     @balance = @user.balance
-  #     erb :"/users/show"
-  #   else
-  #     redirect "/"
-  #   end
-  # end
-  
   get '/expenses/new' do
     if logged_in?
       @user = current_user
@@ -34,10 +24,37 @@ class ExpensesController < ApplicationController
   end
   
   get '/expenses/:id' do
-    if logged_in?
+    @expense = Expense.find(params[:id])
+    
+    if logged_in? && current_user.id == @expense.user_id
       @user = current_user
-      @expense = Expense.find(params[:id])
-      erb :"/users/show_expense"
+      case @expense.month
+      when 1
+        @month = "January"
+      when 2
+        @month = "February"
+      when 3
+        @month = "March"
+      when 4
+        @month = "April"
+      when 5
+        @month = "May"
+      when 6
+        @month = "June"
+      when 7
+        @month = "July"
+      when 8
+        @month = "August"
+      when 9
+        @month = "September"
+      when 10
+        @month = "October"
+      when 11
+        @month = "November"
+      else
+        @month = "December"
+      end
+      erb :"/expenses/show_expense"
     else
       redirect "/login"
     end
@@ -63,9 +80,10 @@ class ExpensesController < ApplicationController
     redirect "/expenses/#{expense.id}"
   end
   
-  delete '/expenses/:id/delete' do
+  get '/expenses/:id/delete' do
     expense = Expense.find(params[:id])
-    if expense.user_id == current_user.id 
+    if logged_in? && current_user.id == expense.user_id
+      current_user.update(balance: current_user.balance += expense.amount)
       expense.delete
       redirect "/users/#{current_user.slug}"
     end

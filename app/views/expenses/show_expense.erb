@@ -1,0 +1,19 @@
+<h3>Amount: $<%='%.2f' % @expense.amount%></h3>
+
+<br>
+<p>
+  Date: <%=@month%>
+  <%=@expense.day%>,
+  <%=@expense.year%>
+  <br>
+  <br>
+  <br>
+  <%=@expense.description%>
+</p>
+<a href="/expenses/<%=@expense.id%>/edit">Edit</a> | <a href="/expenses/<%=@expense.id%>/delete">Delete</a>
+<br>
+<br>
+<br>
+<br>
+<br>
+<p>| <a href="/logout">Logout</a> | <a href="/users/<%=@user.slug%>">Home</a> |</p>
