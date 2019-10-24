@@ -28,32 +28,7 @@ class ExpensesController < ApplicationController
     
     if logged_in? && current_user.id == @expense.user_id
       @user = current_user
-      case @expense.month
-      when 1
-        @month = "January"
-      when 2
-        @month = "February"
-      when 3
-        @month = "March"
-      when 4
-        @month = "April"
-      when 5
-        @month = "May"
-      when 6
-        @month = "June"
-      when 7
-        @month = "July"
-      when 8
-        @month = "August"
-      when 9
-        @month = "September"
-      when 10
-        @month = "October"
-      when 11
-        @month = "November"
-      else
-        @month = "December"
-      end
+      @month = month(@expense.month)
       erb :"/expenses/show_expense"
     else
       redirect "/login"
@@ -61,8 +36,10 @@ class ExpensesController < ApplicationController
   end
   
   get '/expenses/:id/edit' do
-    if logged_in?
-      @expense = Expense.find(params[:id])
+    @expense = Expense.find(params[:id])
+    if logged_in? && current_user.id == @expense.user_id
+      @user = current_user
+      @month = month(@expense.month)
       erb :"/expenses/edit_expense"
     else
       redirect "/login"
@@ -71,12 +48,20 @@ class ExpensesController < ApplicationController
   
   patch '/expenses/:id/edit' do
     expense = Expense.find(params[:id])
-    expense.day = params[:day]
-    expense.month = params[:month]
-    expense.year = params[:year]
-    expense.description = params[:description]
-    expense.amount = params[:amount]
+    current_user.update(balance: current_user.balance += expense.amount)
+    if params[:date] != ""
+      date = params[:date].split("-")
+      new_day = date[2]
+      new_month = date[1]
+      new_year = date[0]
+      expense.day = new_day
+      expense.month = new_month
+      expense.year = new_year
+    end
+    expense.description = params[:description] if params[:description] != ""
+    expense.amount = params[:amount] if params[:amount] != ""
     expense.save
+    current_user.update(balance: current_user.balance -= expense.amount)
     redirect "/expenses/#{expense.id}"
   end
   

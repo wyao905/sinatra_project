@@ -1,0 +1,37 @@
+<h3>Edit Expense</h3>
+<br>
+<br>
+<form action="/expenses/<%=@expense.id%>/edit" method="post">
+  <input type="hidden" id="hidden" name="_method" value="patch">
+  <b>Current Date: <%=@month%></b>
+  <%=@expense.day%>,
+  <%=@expense.year%>
+  <br>
+  New date:
+  <br><input type="date" name="date">
+  <br>
+  <br>
+  <b>Current Amount: $<%='%.2f' % @expense.amount%></b>
+  <br>
+  New Amount:
+  <br><input type="number" name="amount" step="0.01">
+  <br>
+  <br>
+  <b>Current Description:</b>
+  <br>
+  <%=@expense.description%>
+  <br>
+  <br>
+  New Description:
+  <br><textarea name="description" rows="10" cols="30" placeholder="Edit the description for the expense."></textarea>
+  <br>
+  <br>
+  <input type="submit" value="Submit">
+  </p>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <p>| <a href="/logout">Logout</a> | <a href="/users/<%=@user.slug%>">Home</a> |</p>
+</form>
