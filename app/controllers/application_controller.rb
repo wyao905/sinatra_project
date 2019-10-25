@@ -49,5 +49,24 @@ class ApplicationController < Sinatra::Base
         num = "December"
       end
     end
+    
+    def weekday(num)
+      case num
+      when 1
+        num = "Sunday"
+      when 2
+        num = "Monday"
+      when 3
+        num = "Tuesday"
+      when 4
+        num = "Wednesday"
+      when 5
+        num = "Thursday"
+      when 6
+        num = "Friday"
+      else
+        num = "Saturday"
+      end
+    end
   end
 end

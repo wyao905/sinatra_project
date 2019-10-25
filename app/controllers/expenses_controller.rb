@@ -23,6 +23,19 @@ class ExpensesController < ApplicationController
     end
   end
   
+  get '/expenses/week' do
+    binding.pry
+    erb :"/expenses/week_expenses"
+  end
+  
+  get '/expenses/month' do
+    erb :"/expenses/month_expenses"
+  end
+  
+  get '/expenses/year' do
+    erb :"/expenses/year_expenses"
+  end
+  
   get '/expenses/:id' do
     @expense = Expense.find(params[:id])
     

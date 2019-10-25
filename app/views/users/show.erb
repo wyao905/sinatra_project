@@ -12,7 +12,7 @@
       <%@user.expenses.each do |expense|%>
         <li>
           <%="Date: #{expense.year}/#{expense.month}/#{expense.day} - Amount: $#{'%.2f' % expense.amount}"%>
-            |  <a href="/expenses/<%=expense.id%>">More Info</a>
+            | <a href="/expenses/<%=expense.id%>">More Info</a>
         </li>
       <%end%>
     <%end%>
@@ -20,6 +20,9 @@
 </p>
 <p>
   <a href="/expenses/new">New Expense</a>
+  | <a href="/expenses/week">Weekly Expenses</a>
+  | <a href="/expenses/month">Monthly Expenses</a>
+  | <a href="/expenses/year">Annual Expenses</a>
 </p>
 <br>
 <br>
