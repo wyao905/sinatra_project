@@ -24,7 +24,18 @@ class ExpensesController < ApplicationController
   end
   
   get '/expenses/week' do
-    binding.pry
+    @expenses = []
+    @user = current_user
+    norm_time = Time.new(Time.now.year, Time.now.month, Time.now.day)
+    sunday_point = norm_time - (86400 * norm_time.wday)
+    
+    Expense.all.each do |expense|
+      exp_time = Time.new(expense.year, expense.month, expense.day)
+      if exp_time - sunday_point >= 0
+        @expenses << expense
+      end
+    end
+    
     erb :"/expenses/week_expenses"
   end
   
