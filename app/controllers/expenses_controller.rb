@@ -40,10 +40,28 @@ class ExpensesController < ApplicationController
   end
   
   get '/expenses/month' do
+    @expenses = []
+    @user = current_user
+    
+    Expense.all.each do |expense|
+      if expense.year == Time.now.year && expense.month == Time.now.month
+        @expenses << expense
+      end
+    end
+    
     erb :"/expenses/month_expenses"
   end
   
   get '/expenses/year' do
+    @expenses = []
+    @user = current_user
+    
+    Expense.all.each do |expense|
+      if expense.year == Time.now.year
+        @expenses << expense
+      end
+    end
+    
     erb :"/expenses/year_expenses"
   end
   

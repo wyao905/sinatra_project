@@ -1,20 +1,26 @@
-<h3>Weekly Expenses</h3>
+<h3>Expenses This Week</h3>
 <br>
 <br>
 <p>
+  <%total = 0%>
   <ol>
     <%if @expenses.empty?%>
-      There are no expenses within the past week.
+      There are no expenses so far this week.
     <%else%>
-      <%@expenses.each do |expense|%>
+      <%expenses = @expenses.sort_by {|a| [a.day]}.reverse!%>
+      <%expenses.each do |expense|%>
         <li>
           <%="Date: #{expense.year}/#{expense.month}/#{expense.day} - Amount: $#{'%.2f' % expense.amount}"%>
             | <a href="/expenses/<%=expense.id%>">More Info</a>
+            <%total += expense.amount%>
         </li>
       <%end%>
     <%end%>
   </ol>
 </p>
+<br>
+<br>
+<p>Total: $<%='%.2f' % total%></p>
 <br>
 <br>
 <br>
