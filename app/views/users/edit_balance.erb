@@ -1,0 +1,26 @@
+<h3>Add or Edit Balance</h3>
+<br>
+<br>
+<form action="/users/<%=@user.slug%>/balance/edit" method="post">
+  <input type="hidden" id="hidden" name="_method" value="patch">
+  <b>Current Balance: $<%='%.2f' % @user.balance%></b>
+  <br>
+  <br>
+  <p>Add additional funds to current balance or enter new balance.</p>
+  Add Funds:
+  <br><input type="number" name="add_balance" placeholder="Add Additional Funds" step="0.01">
+  <br>
+  <br>
+  Edit Balance:
+  <br><input type="number" name="new_balance" placeholder="Enter New Balance" step="0.01">
+  <br>
+  <br>
+  <input type="submit"  value="Submit">
+  </p>
+  <br>
+  <br>
+  <br>
+  <br>
+  <br>
+  <p>| <a href="/logout">Logout</a> | <a href="/users/<%=@user.slug%>">Home</a> |</p>
+</form>

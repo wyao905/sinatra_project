@@ -53,4 +53,31 @@ class UsersController < ApplicationController
       redirect "/"
     end
 	end
+	
+	get '/users/:slug/balance/edit' do
+	  if logged_in?
+	    if current_user.slug == params[:slug]
+	      @user = current_user
+	      
+	      erb :"/users/edit_balance"
+	    else
+	      redirect "/users/#{@user.slug}"
+	    end
+	  else
+	    redirect "/"
+	  end
+  end
+	
+	patch '/users/:slug/balance/edit' do
+	  user = current_user
+	  if (params[:add_balance] == "" && params[:new_balance] == "") || (params[:add_balance] != "" && params[:new_balance] != "")
+	    redirect "/users/#{user.slug}/balance/edit"
+	  elsif params[:add_balance] != ""
+	    user.update(balance: user.balance += params[:add_balance].to_f)
+	  else
+	    user.update(balance: user.balance = params[:new_balance].to_f)
+	  end
+	  
+	  redirect "/users/#{user.slug}"
+	end
 end
