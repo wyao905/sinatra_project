@@ -24,67 +24,79 @@ class ExpensesController < ApplicationController
   end
   
   get '/expenses/week' do
-    @expenses = []
-    @user = current_user
-    norm_time = Time.new(Time.now.year, Time.now.month, Time.now.day)
-    sunday_point = norm_time - (86400 * norm_time.wday)
-    
-    Expense.all.each do |expense|
-      exp_time = Time.new(expense.year, expense.month, expense.day)
-      if exp_time - sunday_point >= 0
-        @expenses << expense
+    if logged_in?
+      @expenses = []
+      @user = current_user
+      norm_time = Time.new(Time.now.year, Time.now.month, Time.now.day)
+      sunday_point = norm_time - (86400 * norm_time.wday)
+      
+      Expense.all.each do |expense|
+        exp_time = Time.new(expense.year, expense.month, expense.day)
+        if exp_time - sunday_point >= 0
+          @expenses << expense
+        end
       end
+      
+      erb :"/expenses/week_expenses"
+    else
+      redirect "/"
     end
-    
-    erb :"/expenses/week_expenses"
   end
   
   get '/expenses/month' do
-    @expenses = []
-    @user = current_user
-    
-    Expense.all.each do |expense|
-      if expense.year == Time.now.year && expense.month == Time.now.month
-        @expenses << expense
+    if logged_in?
+      @expenses = []
+      @user = current_user
+      
+      Expense.all.each do |expense|
+        if expense.year == Time.now.year && expense.month == Time.now.month
+          @expenses << expense
+        end
       end
+      
+      erb :"/expenses/month_expenses"
+    else
+      redirect "/"
     end
-    
-    erb :"/expenses/month_expenses"
   end
   
   get '/expenses/year' do
-    @expenses = []
-    @user = current_user
-    
-    Expense.all.each do |expense|
-      if expense.year == Time.now.year
-        @expenses << expense
+    if logged_in?
+      @expenses = []
+      @user = current_user
+      
+      Expense.all.each do |expense|
+        if expense.year == Time.now.year
+          @expenses << expense
+        end
       end
+      
+      erb :"/expenses/year_expenses"
+    else
+      redirect "/"
     end
-    
-    erb :"/expenses/year_expenses"
   end
   
   get '/expenses/:id' do
-    @expense = Expense.find(params[:id])
-    
-    if logged_in? && current_user.id == @expense.user_id
+    if logged_in?
+      @expense = Expense.find(params[:id])
+      current_user.id == @expense.user_id
       @user = current_user
       @month = month(@expense.month)
       erb :"/expenses/show_expense"
     else
-      redirect "/login"
+      redirect "/"
     end
   end
   
   get '/expenses/:id/edit' do
-    @expense = Expense.find(params[:id])
-    if logged_in? && current_user.id == @expense.user_id
+    if logged_in?
+      @expense = Expense.find(params[:id])
       @user = current_user
       @month = month(@expense.month)
       erb :"/expenses/edit_expense"
     else
-      redirect "/login"
+      redirect "/"
     end
   end
   
@@ -108,12 +120,13 @@ class ExpensesController < ApplicationController
   end
   
   get '/expenses/:id/delete' do
-    expense = Expense.find(params[:id])
-    if logged_in? && current_user.id == expense.user_id
+    if logged_in?
+      expense = Expense.find(params[:id])
       current_user.update(balance: current_user.balance += expense.amount)
       expense.delete
       redirect "/users/#{current_user.slug}"
+    else
+      redirect "/"
     end
-    redirect "/users/#{current_user.slug}"
   end
 end
