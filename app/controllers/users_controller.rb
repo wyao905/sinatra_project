@@ -47,8 +47,12 @@ class UsersController < ApplicationController
 	
 	get '/users/:slug' do
 	  if logged_in?
-	    @user = current_user
-	    erb :"/users/show"
+	    if current_user.slug == params[:slug]
+  	    @user = current_user
+  	    erb :"/users/show"
+  	  else
+  	    redirect "/users/#{current_user.slug}"
+  	  end
     else
       redirect "/"
     end
@@ -61,7 +65,7 @@ class UsersController < ApplicationController
 	      
 	      erb :"/users/edit_balance"
 	    else
-	      redirect "/users/#{@user.slug}"
+	      redirect "/users/#{current_user.slug}"
 	    end
 	  else
 	    redirect "/"
