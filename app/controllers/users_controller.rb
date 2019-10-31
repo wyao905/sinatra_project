@@ -9,6 +9,7 @@ class UsersController < ApplicationController
   
   post '/signup' do
     if params[:name] == "" || params[:email] == "" || params[:password] == ""
+      flash[:message] = "*Missing required field."
       redirect "/signup"
     else
       user = User.create(params)
@@ -36,12 +37,14 @@ class UsersController < ApplicationController
       session[:user_id] = user.id
       redirect "/users/#{user.slug}"
     else
+      flash[:message] = "*Incorrect Email or Password."
       redirect "/login"
     end
   end
   
   get '/logout' do
     session.clear
+    flash[:message_2] = "*Successfully logged out."
     redirect "/"
 	end
 	
@@ -51,6 +54,7 @@ class UsersController < ApplicationController
   	    @user = current_user
   	    erb :"/users/show"
   	  else
+  	    flash[:message_2] = "*Invalid access."
   	    redirect "/users/#{current_user.slug}"
   	  end
     else
@@ -75,13 +79,14 @@ class UsersController < ApplicationController
 	patch '/users/:slug/balance/edit' do
 	  user = current_user
 	  if (params[:add_balance] == "" && params[:new_balance] == "") || (params[:add_balance] != "" && params[:new_balance] != "")
+	    flash[:message] = "*Invalid Input."
 	    redirect "/users/#{user.slug}/balance/edit"
 	  elsif params[:add_balance] != ""
 	    user.update(balance: user.balance += params[:add_balance].to_f)
 	  else
 	    user.update(balance: user.balance = params[:new_balance].to_f)
 	  end
-	  
+	  flash[:message] = "*Successfully updated balance."
 	  redirect "/users/#{user.slug}"
 	end
 end

@@ -7,6 +7,8 @@ class ApplicationController < Sinatra::Base
     enable :sessions
     set :session_secret, "password_security"
   end
+  
+  register Sinatra::Flash
 
   get "/" do
     erb :index
