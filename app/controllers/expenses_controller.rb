@@ -4,6 +4,7 @@ class ExpensesController < ApplicationController
       @user = current_user
       erb :"/expenses/new"
     else
+      flash[:message] = "*Must be logged in."
       redirect "/"
     end
   end
@@ -41,6 +42,7 @@ class ExpensesController < ApplicationController
       
       erb :"/expenses/week_expenses"
     else
+      flash[:message] = "*Must be logged in."
       redirect "/"
     end
   end
@@ -58,6 +60,7 @@ class ExpensesController < ApplicationController
       
       erb :"/expenses/month_expenses"
     else
+      flash[:message] = "*Must be logged in."
       redirect "/"
     end
   end
@@ -75,6 +78,7 @@ class ExpensesController < ApplicationController
       
       erb :"/expenses/year_expenses"
     else
+      flash[:message] = "*Must be logged in."
       redirect "/"
     end
   end
@@ -82,11 +86,11 @@ class ExpensesController < ApplicationController
   get '/expenses/:id' do
     if logged_in?
       @expense = Expense.find(params[:id])
-      current_user.id == @expense.user_id
       @user = current_user
       @month = month(@expense.month)
       erb :"/expenses/show_expense"
     else
+      flash[:message] = "*Must be logged in."
       redirect "/"
     end
   end
@@ -98,6 +102,7 @@ class ExpensesController < ApplicationController
       @month = month(@expense.month)
       erb :"/expenses/edit_expense"
     else
+      flash[:message] = "*Must be logged in."
       redirect "/"
     end
   end
@@ -130,6 +135,7 @@ class ExpensesController < ApplicationController
       flash[:message] = "*Successfully deleted expense."
       redirect "/users/#{current_user.slug}"
     else
+      flash[:message] = "*Must be logged in."
       redirect "/"
     end
   end

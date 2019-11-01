@@ -53,9 +53,11 @@ class UsersController < ApplicationController
   	    @user = current_user
   	    erb :"/users/show"
   	  else
+  	    flash[:message] = "*You do not have permission to view."
   	    redirect "/users/#{current_user.slug}"
   	  end
     else
+      flash[:message] = "*Must be logged in."
       redirect "/"
     end
 	end
@@ -66,9 +68,11 @@ class UsersController < ApplicationController
 	      @user = current_user
 	      erb :"/users/edit_balance"
 	    else
+	      flash[:message] = "*You do not have permission to edit."
 	      redirect "/users/#{current_user.slug}"
 	    end
 	  else
+	    flash[:message] = "*Must be logged in."
 	    redirect "/"
 	  end
   end

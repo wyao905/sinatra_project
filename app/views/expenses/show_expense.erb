@@ -10,6 +10,11 @@
   <br>
   <%=@expense.description%>
 </p>
+<%if flash.include?(:message)%>
+  <%=flash[:message]%>
+<%end%>
+<br>
+<br>
 <a href="/expenses/<%=@expense.id%>/edit">Edit</a> | <a href="/expenses/<%=@expense.id%>/delete">Delete</a>
 <br>
 <br>
