@@ -44,7 +44,6 @@ class UsersController < ApplicationController
   
   get '/logout' do
     session.clear
-    flash[:message_2] = "*Successfully logged out."
     redirect "/"
 	end
 	
@@ -54,7 +53,6 @@ class UsersController < ApplicationController
   	    @user = current_user
   	    erb :"/users/show"
   	  else
-  	    flash[:message_2] = "*Invalid access."
   	    redirect "/users/#{current_user.slug}"
   	  end
     else
@@ -66,7 +64,6 @@ class UsersController < ApplicationController
 	  if logged_in?
 	    if current_user.slug == params[:slug]
 	      @user = current_user
-	      
 	      erb :"/users/edit_balance"
 	    else
 	      redirect "/users/#{current_user.slug}"

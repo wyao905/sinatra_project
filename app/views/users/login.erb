@@ -1,4 +1,3 @@
-
 <h3>Login</h3>
 <br>
 <br>
@@ -13,6 +12,10 @@
   <br>
   <input type="submit" name="login">
 </form>
+<br>
+<%if flash.include?(:message)%>
+  <%=flash[:message]%>
+<%end%>
 <br>
 <br>
 <br>

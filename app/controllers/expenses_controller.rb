@@ -10,6 +10,7 @@ class ExpensesController < ApplicationController
   
   post '/expenses/new' do
     if params[:date] == "" || params[:amount] == "" || params[:description] == ""
+      flash[:message] = "*Missing required field."
       redirect "/expenses/new"
     else
       date = params[:date].split("-")
@@ -19,6 +20,7 @@ class ExpensesController < ApplicationController
       new_expense = Expense.create(day: day, month: month, year: year, description: params[:description], amount: params[:amount])
       current_user.expenses << new_expense
       current_user.update(balance: current_user.balance -= new_expense.amount)
+      flash[:message] = "*Successfully created expense."
       redirect "/users/#{current_user.slug}"
     end
   end
@@ -116,6 +118,7 @@ class ExpensesController < ApplicationController
     expense.amount = params[:amount] if params[:amount] != ""
     expense.save
     current_user.update(balance: current_user.balance -= expense.amount)
+    flash[:message] = "*Successfully updated expense."
     redirect "/expenses/#{expense.id}"
   end
   
@@ -124,6 +127,7 @@ class ExpensesController < ApplicationController
       expense = Expense.find(params[:id])
       current_user.update(balance: current_user.balance += expense.amount)
       expense.delete
+      flash[:message] = "*Successfully deleted expense."
       redirect "/users/#{current_user.slug}"
     else
       redirect "/"

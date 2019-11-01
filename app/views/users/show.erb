@@ -27,6 +27,10 @@
   | <a href="/expenses/year">Annual Expenses</a>
 </p>
 <br>
+<%if flash.include?(:message)%>
+  <%=flash[:message]%>
+<%end%>
+<br>
 <br>
 <br>
 <br>
