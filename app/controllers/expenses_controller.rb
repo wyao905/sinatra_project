@@ -1,18 +1,23 @@
 class ExpensesController < ApplicationController
-  get '/expenses/new' do
+  get '/users/:slug/expenses/new' do
     if logged_in?
-      @user = current_user
-      erb :"/expenses/new"
+      if current_user.slug == params[:slug]
+        @user = current_user
+        erb :"/expenses/new"
+      else
+        flash[:message] = "*Access denied."
+        redirect "/users/#{current_user.slug}"
+      end
     else
       flash[:message] = "*Must be logged in."
       redirect "/"
     end
   end
   
-  post '/expenses/new' do
+  post '/users/:slug/expenses/new' do
     if params[:date] == "" || params[:amount] == "" || params[:description] == ""
       flash[:message] = "*Missing required field."
-      redirect "/expenses/new"
+      redirect "/users/#{current_user.slug}/expenses/new"
     else
       date = params[:date].split("-")
       day = date[2]
@@ -26,88 +31,113 @@ class ExpensesController < ApplicationController
     end
   end
   
-  get '/expenses/week' do
+  get '/users/:slug/expenses/week' do
     if logged_in?
-      @expenses = []
-      @user = current_user
-      norm_time = Time.new(Time.now.year, Time.now.month, Time.now.day)
-      sunday_point = norm_time - (86400 * norm_time.wday)
-      
-      Expense.all.each do |expense|
-        exp_time = Time.new(expense.year, expense.month, expense.day)
-        if exp_time - sunday_point >= 0
-          @expenses << expense
+      if current_user.slug == params[:slug]
+        @expenses = []
+        @user = current_user
+        norm_time = Time.new(Time.now.year, Time.now.month, Time.now.day)
+        sunday_point = norm_time - (86400 * norm_time.wday)
+        
+        Expense.all.each do |expense|
+          exp_time = Time.new(expense.year, expense.month, expense.day)
+          if exp_time - sunday_point >= 0
+            @expenses << expense
+          end
         end
+        
+        erb :"/expenses/week_expenses"
+      else
+        flash[:message] = "*Access denied."
+        redirect "/users/#{current_user.slug}"
       end
-      
-      erb :"/expenses/week_expenses"
     else
       flash[:message] = "*Must be logged in."
       redirect "/"
     end
   end
   
-  get '/expenses/month' do
+  get '/users/:slug/expenses/month' do
     if logged_in?
-      @expenses = []
-      @user = current_user
-      
-      Expense.all.each do |expense|
-        if expense.year == Time.now.year && expense.month == Time.now.month
-          @expenses << expense
+      if current_user.slug == params[:slug]
+        @expenses = []
+        @user = current_user
+        
+        @user.expenses.each do |expense|
+          if expense.year == Time.now.year && expense.month == Time.now.month
+            @expenses << expense
+          end
         end
+        
+        erb :"/expenses/month_expenses"
+      else
+        flash[:message] = "*Access denied."
+        redirect "/users/#{current_user.slug}"
       end
-      
-      erb :"/expenses/month_expenses"
     else
       flash[:message] = "*Must be logged in."
       redirect "/"
     end
   end
   
-  get '/expenses/year' do
+  get '/users/:slug/expenses/year' do
     if logged_in?
-      @expenses = []
-      @user = current_user
-      
-      Expense.all.each do |expense|
-        if expense.year == Time.now.year
-          @expenses << expense
+      if current_user.slug == params[:slug]
+        @expenses = []
+        @user = current_user
+        
+        @user.expenses.each do |expense|
+          if expense.year == Time.now.year
+            @expenses << expense
+          end
         end
+        
+        erb :"/expenses/year_expenses"
+      else
+        flash[:message] = "*Access denied."
+        redirect "/users/#{current_user.slug}"
       end
-      
-      erb :"/expenses/year_expenses"
     else
       flash[:message] = "*Must be logged in."
       redirect "/"
     end
   end
   
-  get '/expenses/:id' do
+  get '/users/:slug/expenses/:id' do
     if logged_in?
-      @expense = Expense.find(params[:id])
-      @user = current_user
-      @month = month(@expense.month)
-      erb :"/expenses/show_expense"
+      if current_user.slug == params[:slug]
+        @expense = Expense.find(params[:id])
+        @user = current_user
+        @month = month(@expense.month)
+        erb :"/expenses/show_expense"
+      else
+        flash[:message] = "*Access denied."
+        redirect "/users/#{current_user.slug}"
+      end
     else
       flash[:message] = "*Must be logged in."
       redirect "/"
     end
   end
   
-  get '/expenses/:id/edit' do
+  get '/users/:slug/expenses/:id/edit' do
     if logged_in?
-      @expense = Expense.find(params[:id])
-      @user = current_user
-      @month = month(@expense.month)
-      erb :"/expenses/edit_expense"
+      if current_user.slug == params[:slug]
+        @expense = Expense.find(params[:id])
+        @user = current_user
+        @month = month(@expense.month)
+        erb :"/expenses/edit_expense"
+      else
+        flash[:message] = "*Access denied."
+        redirect "/users/#{current_user.slug}"
+      end
     else
       flash[:message] = "*Must be logged in."
       redirect "/"
     end
   end
   
-  patch '/expenses/:id/edit' do
+  patch '/users/:slug/expenses/:id/edit' do
     expense = Expense.find(params[:id])
     current_user.update(balance: current_user.balance += expense.amount)
     if params[:date] != ""
@@ -124,16 +154,21 @@ class ExpensesController < ApplicationController
     expense.save
     current_user.update(balance: current_user.balance -= expense.amount)
     flash[:message] = "*Successfully updated expense."
-    redirect "/expenses/#{expense.id}"
+    redirect "/users/#{current_user.slug}/expenses/#{expense.id}"
   end
   
-  get '/expenses/:id/delete' do
+  get '/users/:slug/expenses/:id/delete' do
     if logged_in?
-      expense = Expense.find(params[:id])
-      current_user.update(balance: current_user.balance += expense.amount)
-      expense.delete
-      flash[:message] = "*Successfully deleted expense."
-      redirect "/users/#{current_user.slug}"
+      if current_user.slug == params[:slug]
+        expense = Expense.find(params[:id])
+        current_user.update(balance: current_user.balance += expense.amount)
+        expense.delete
+        flash[:message] = "*Successfully deleted expense."
+        redirect "/users/#{current_user.slug}"
+      else
+        flash[:message] = "*Access denied."
+        redirect "/users/#{current_user.slug}"
+      end
     else
       flash[:message] = "*Must be logged in."
       redirect "/"

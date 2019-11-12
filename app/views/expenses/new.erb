@@ -1,7 +1,7 @@
 <h3>New Expense</h3>
 <br>
 <br>
-<form action="/expenses/new" method="post">
+<form action="/users/<%=@user.slug%>/expenses/new" method="post">
   Enter date:
   <br><input type="date" name="date">
   <br>

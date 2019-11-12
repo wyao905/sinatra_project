@@ -14,17 +14,17 @@
       <%sorted_expenses.each do |expense|%>
         <li>
           <%="Date: #{expense.year}/#{expense.month}/#{expense.day} - Amount: $#{'%.2f' % expense.amount}"%>
-          | <a href="/expenses/<%=expense.id%>">More Info</a>
+          | <a href="/users/<%=@user.slug%>/expenses/<%=expense.id%>">More Info</a>
         </li>
       <%end%>
     <%end%>
   </ol>
 </p>
 <p>
-  <a href="/expenses/new">New Expense</a>
-  | <a href="/expenses/week">Weekly Expenses</a>
-  | <a href="/expenses/month">Monthly Expenses</a>
-  | <a href="/expenses/year">Annual Expenses</a>
+  <a href="/users/<%=@user.slug%>/expenses/new">New Expense</a>
+  | <a href="/users/<%=@user.slug%>/expenses/week">Weekly Expenses</a>
+  | <a href="/users/<%=@user.slug%>/expenses/month">Monthly Expenses</a>
+  | <a href="/users/<%=@user.slug%>/expenses/year">Annual Expenses</a>
 </p>
 <br>
 <%if flash.include?(:message)%>
